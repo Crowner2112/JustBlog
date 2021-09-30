@@ -16,5 +16,11 @@ namespace JustBlog.Data.Repositories
         {
             return this.DbSet.Where(x => x.PostId == id);
         }
+
+        public void UpdateCommentText(int id, string content)
+        {
+            var comment = this.DbSet.Find(id);
+            comment.CommentText = content;
+        }
     }
 }

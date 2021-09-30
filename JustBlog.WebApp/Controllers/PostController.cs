@@ -38,8 +38,15 @@ namespace JustBlog.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddComment(string commentText)
         {
-            
-            await commentService.AddCommentAsync(CurrentUserId.ToString(), CurrentPostId, commentText);
+            if (!string.IsNullOrEmpty(commentText))
+                await commentService.AddCommentAsync(CurrentUserId.ToString(), CurrentPostId, commentText);
+            return NoContent();
+        }
+
+        [HttpPost]
+        public IActionResult DeleteComment(int commentId)
+        {
+            commentService.DeleteComment(commentId);
             return NoContent();
         }
 
@@ -47,6 +54,13 @@ namespace JustBlog.WebApp.Controllers
         public IActionResult ChangeVote()
         {
             rateService.ChangeRate(CurrentUserId, CurrentPostId);
+            return NoContent();
+        }
+
+        [HttpPost]
+        public IActionResult UpdateComment(int commentId, string commentText)
+        {
+            commentService.UpdateComment(commentId, commentText);
             return NoContent();
         }
     }

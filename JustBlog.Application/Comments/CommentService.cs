@@ -30,5 +30,19 @@ namespace JustBlog.Application.Comments
             await unitOfWork.SaveChangesAsync();
             return true;
         }
+
+        public bool DeleteComment(int id)
+        {
+            unitOfWork.CommentRepository.Delete(true,id);
+            unitOfWork.SaveChanges();
+            return true;
+        }
+
+        public bool UpdateComment(int id, string commentText)
+        {
+            unitOfWork.CommentRepository.UpdateCommentText(id, commentText);
+            unitOfWork.SaveChanges();
+            return true;
+        }
     }
 }

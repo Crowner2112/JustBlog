@@ -72,6 +72,8 @@ namespace JustBlog.WebApp.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [Route("/Identity/Account/Login")]
+        [Route("/Home/Login")]
         public IActionResult Login()
         {
             return View();
@@ -79,6 +81,8 @@ namespace JustBlog.WebApp.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [Route("/Identity/Account/Login")]
+        [Route("/Home/Login")]
         public async Task<IActionResult> Login(LoginViewModel user)
         {
             if (ModelState.IsValid)
@@ -91,6 +95,13 @@ namespace JustBlog.WebApp.Controllers
                 ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
             }
             return View(user);
+        }
+
+        [HttpGet]
+        [Route("/Identity/Account/AccessDenied")]
+        public ActionResult AccessDenied()
+        {
+            return View();
         }
 
         public async Task<IActionResult> Logout()
