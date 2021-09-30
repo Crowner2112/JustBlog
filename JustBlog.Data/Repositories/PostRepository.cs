@@ -20,7 +20,8 @@ namespace JustBlog.Data.Repositories
                 return new Post();
             else
             {
-                prePost.Rate = (decimal)prePost.RateCount / prePost.ViewCount;
+                if (prePost.ViewCount > 0 && prePost.RateCount > 0)
+                    prePost.Rate = (decimal)prePost.RateCount / prePost.ViewCount;
                 prePost.ViewCount++;
                 return prePost;
             }

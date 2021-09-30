@@ -58,7 +58,7 @@ namespace JustBlog.WebApp.Areas.Admin.Controllers
             {
                 isSuccess = this.postService.Create(createPostVm);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 isSuccess = false;
             }
@@ -67,7 +67,11 @@ namespace JustBlog.WebApp.Areas.Admin.Controllers
                 TempData["PreResult"] = "Tạo mới thành công";
                 return RedirectToAction("Index", "Post");
             }
-            return View();
+            else
+            {
+                TempData["PreResult"] = "Tạo thất bại";
+                return View();
+            }
         }
 
         [HttpPost]

@@ -15,7 +15,7 @@ namespace JustBlog.Models.Entities
 
         [DisplayName("Tóm tắt")]
         [Required(ErrorMessage = "Short description can not be null or empty")]
-        [StringLength(20, ErrorMessage = "Short description can not be over 20 chars")]
+        [StringLength(200, ErrorMessage = "Short description can not be over 200 chars")]
         public string ShortDescription { get; set; }
 
         [DisplayName("Nội dung")]

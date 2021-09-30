@@ -59,7 +59,7 @@ namespace JustBlog.Application.Posts
                 this.unitOfWork.PostRepository.Add(post);
                 return this.unitOfWork.SaveChanges() > 0;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 throw;
             }
@@ -155,7 +155,6 @@ namespace JustBlog.Application.Posts
                 post.PostContent = createPostVm.PostContent;
                 post.IsDeleted = createPostVm.IsDeleted;
                 post.UrlSlug = createPostVm.UrlSlug;
-                post.Publish = createPostVm.Publish;
                 post.ShortDescription = createPostVm.ShortDescription;
                 post.CategoryId = createPostVm.CategoryId;
                 foreach (var item in postTagMaps)

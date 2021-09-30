@@ -144,13 +144,16 @@
             var commentText = $('#commentText').val();
             if (commentText != "") {
                 var html = [
-                    '<div class="card mb-2">',
+                    '<div class="card mb-2" id="comment">',
                     '<div class="card-header">',
                     '<b>@userName</b> - @userEmail - @DateTime.UtcNow.ToString("dd/MM/yyyy")',
                     '</div>',
-                    '<div class="card-body">',
-                    '<p class="card-text m-0">', commentText, '</p>',
-                    '</div>'
+                    '<div class="card-body d-flex justify-content-between" id="actionSection">',
+                    '<p class="card-text m-0" id="currentComment">', commentText, '</p>',
+                    '<div class="d-flex">',
+                    '<button class="border-0 bg-light" type="button" onclick="showUpdateSection(this)"><i class="fas fa-edit"></i></button>',
+                    '<button class="border-0 bg-light" type="submit" onclick="return functionConfirm(this)"><i class="fas fa-trash-alt"></i></button>',
+                    '</div></div></div>'
                 ];
                 $('#commentSection').append(html.join(''));
                 ('#commentText').val('');
