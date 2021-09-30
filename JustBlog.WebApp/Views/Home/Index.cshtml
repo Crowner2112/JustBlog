@@ -7,9 +7,9 @@
 <h2 class="post-title">All Posts!</h2>
 <hr />
 <div class="d-flex justify-content-center">
-    <a href="#" class="btn btn-primary active me-2 rounded-1" aria-current="page">All</a>
-    <a href="/Home/MostView" class="btn btn-primary me-2 rounded-1">Most View</a>
-    <a href="/Home/HighestRate" class="btn btn-primary rounded-1">Highest Rate</a>
+    <a href="#" class="btn btn-outline-primary active me-2 rounded-1" aria-current="page">All</a>
+    <a href="/Home/MostView" class="btn btn-outline-primary me-2 rounded-1">Most View</a>
+    <a href="/Home/HighestRate" class="btn btn-outline-primary rounded-1">Highest Rate</a>
 </div>
 @await Html.PartialAsync("_ShowPosts",Model)
 <partial name="_PagingHome" />

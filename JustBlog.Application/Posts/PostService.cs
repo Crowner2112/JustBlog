@@ -109,7 +109,8 @@ namespace JustBlog.Application.Posts
             var posts = this.unitOfWork.PostRepository.GetAll(filter, isDeleted: false);
             foreach (var post in posts)
             {
-                post.Rate = (decimal)post.RateCount / post.ViewCount;
+                if (post.RateCount > 0 && post.ViewCount>0)
+                    post.Rate = (decimal)post.RateCount / post.ViewCount;
             }
             var result = posts.OrderBy(x => x.Id).Skip(start).Take(limit);
             return result;

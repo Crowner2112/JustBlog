@@ -51,22 +51,27 @@ namespace JustBlog.Data.Repositories
 
         public IEnumerable<Post> GetMostViewedPost(int size)
         {
-            var list = this.DbSet.Where(x=>x.Publish).OrderByDescending(x => x.ViewCount).Take(size);
+            var list = this.DbSet.Where(x => x.Publish && !x.IsDeleted).OrderByDescending(x => x.ViewCount).Take(size);
             foreach (var item in list)
             {
-                item.Rate = (decimal)item.RateCount / item.ViewCount;
+                if (item.RateCount > 0 && item.ViewCount > 0)
+                    item.Rate = (decimal)item.RateCount / item.ViewCount;
             }
             return list;
         }
 
         public IEnumerable<Post> GetHighestPosts(int size)
         {
-            var list = this.DbSet.Where(x => x.Publish).OrderByDescending(x => (decimal)x.RateCount / x.ViewCount).Take(size);
+            var list = this.DbSet.Where(x => x.Publish && !x.IsDeleted);
+            var finalList = new List<Post>();
             foreach (var item in list)
             {
-                item.Rate = (decimal)item.RateCount / item.ViewCount;
+                if (item.RateCount > 0 && item.ViewCount > 0)
+                    item.Rate = (decimal)item.RateCount / item.ViewCount;
+                finalList.Add(item);
             }
-            return list;
+            var result = finalList.OrderByDescending(x => x.Rate).Take(size);
+            return result;
         }
     }
 }
