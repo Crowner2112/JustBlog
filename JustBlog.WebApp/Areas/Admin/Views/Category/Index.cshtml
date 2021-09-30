@@ -1,0 +1,99 @@
+﻿@using JustBlog.ViewModels.Categories
+@model IEnumerable<CategoryVm>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    string keyword = "";
+    if (ViewBag.Keyword != null) keyword = ViewBag.Keyword as string;
+}
+
+<h3>Danh sách danh mục bài viết</h3>
+<hr />
+<div class="card">
+    <div class="card-header">
+        <form asp-area="Admin" asp-controller="Category" asp-action="Index" method="get">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" value="@keyword" name="keyword" placeholder="Search string" aria-label="Search string" aria-describedby="basic-addon2">
+                <select>
+                    <option value="value"> Find By Name</option>
+                    <option value="value"> Find By Id</option>
+                </select>
+                <button type="submit" class="btn btn-success">Search</button>
+            </div>
+        </form>
+    </div>
+    <div class="card-body">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success"> @TempData["Success"]</div>
+        }
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Created On</th>
+                    <th>Status</th>
+                    <th colspan="3">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var category in Model)
+                {
+                    <tr>
+                        <td>@category.Id</td>
+                        <td>@category.Name</td>
+                        <td>@category.CreatedOn.ToString("dd/MM/yyyy")</td>
+                        @if (category.IsDeleted)
+                        {
+                            <td id="status">Deleted</td>
+                        }
+                        else
+                        {
+                            <td id="status"></td>
+                        }
+                        <td class="d-flex">
+                            @if (User.IsInRole("BlogOwner"))
+                            {
+                                if (category.IsDeleted)
+                                {
+                                    <button type="button" class="btn btn-sm btn-danger d-none d-md-inline-block mr-1" disabled>Delete</button>
+                                }
+                                else
+                                {
+                                    <form asp-action="Delete" asp-route-id="@category.Id" data-ajax="true" data-ajax-success="deleteItem(this)">
+                                        <button id="btnSubmit" type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block mr-1" onclick="return functionConfirm(this)">
+                                            Delete
+                                        </button>
+                                    </form>
+                                }
+                            }
+                            <a asp-action="Update" asp-route-id="@category.Id" class="btn btn-sm btn-secondary mr-1">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+        <partial name="_PagingSection" />
+    </div>
+</div>
+@section scripts{
+    <script>
+        function functionConfirm(event) {
+            if (confirm("Are you want to delete this category?")) {
+                $('#deleteform').submit();
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function deleteItem(form) {
+            $(form).parents('tr').children('#status').text("Deleted");
+            $(form).children("#btnSubmit").attr('disabled', true);
+        }
+    </script>
+}

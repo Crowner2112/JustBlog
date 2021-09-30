@@ -1,0 +1,56 @@
+﻿@using JustBlog.ViewModels.Posts
+@using JustBlog.Application.Categories
+@inject ICategoryService categoryService;
+
+@model CreatePostVm
+
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var categories = categoryService.GetAll();
+}
+
+<h3>Cập nhật bài viết</h3>
+<hr />
+<div class="row d-flex justify-content-center">
+    <div class="col-5">
+        <form asp-action="Update">
+            @if (TempData["PreResult"] != null)
+            {
+                <div class="alert alert-danger">@TempData["PreResult"]</div>}
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" onchange="ChangeUrl('Title','UrlSlug')" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UrlSlug" class="control-label"></label>
+                <input asp-for="UrlSlug" class="form-control" readonly />
+                <span asp-validation-for="UrlSlug" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShortDescription" class="control-label"></label>
+                <input asp-for="ShortDescription" class="form-control" />
+                <span asp-validation-for="ShortDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Danh mục</label>
+                <select class="form-control" asp-for="CategoryId" asp-items="@(new SelectList(categories,"Id","Name"))">
+                    <option selected>--Chọn Danh Mục Bài Viết--</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tags" class="form-label"></label>
+                <input type="text" class="form-control" asp-for="Tags">
+                <span asp-validation-for="Tags" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <textarea asp-for="PostContent" id="editor"></textarea>
+                <span asp-validation-for="PostContent" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>

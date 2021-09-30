@@ -1,0 +1,57 @@
+﻿@using JustBlog.Application.Categories
+@using Microsoft.AspNetCore.Identity
+@using JustBlog.Models.Entities
+@inject ICategoryService categoryService
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+@{
+    var categories = categoryService.GetAll();
+}
+<nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" href="/Home">JustBlog</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/Home">Trang chủ</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link px-lg-3 py-3 py-lg-4 dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Danh mục bài viết
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark bg-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                        @foreach (var category in categories)
+                        {
+                            <li><a class="dropdown-item" href="/Category/@category.UrlSlug">@category.Name</a></li>
+                        }
+                    </ul>
+                </li>
+
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link px-lg-3 py-3 py-lg-4 dropdown-toggle" href="#" id="userOption" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Xin chào: @UserManager.GetUserName(User)!
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark bg-dark" aria-labelledby="userOption">
+                            @if (this.User.IsInRole("BlogOwner") || this.User.IsInRole("Contributor"))
+                            {
+                                <li><a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">Quản lý hệ thống</a></li>
+                            }
+                            <li><a class="dropdown-item" asp-controller="Account" asp-action="Index">Thông tin tài khoản</a></li>
+                            <li><a class="dropdown-item" asp-controller="Home" asp-action="Logout">Đăng xuất</a></li>
+                        </ul>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a class="nav-link px-lg-3 py-3 py-lg-4" href="/Home/Login">Đăng nhập</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</nav>

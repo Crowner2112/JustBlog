@@ -1,0 +1,38 @@
+﻿@model JustBlog.Models.Entities.Tag
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h3>Tạo tag mới</h3>
+<hr />
+<div class="row d-flex justify-content-center">
+    <div class="col-5">
+        <form asp-area="Admin" asp-controller="Tag" asp-action="Create">
+            @if (TempData["PreResult"] != null)
+            {
+                <div class="alert alert-danger">@TempData["PreResult"]</div>
+            }
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input type="text" class="form-control" onchange="ChangeUrl('Name','UrlSlug')" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UrlSlug" class="control-label"></label>
+                <input asp-for="UrlSlug" class="form-control" readonly />
+                <span asp-validation-for="UrlSlug" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" id="editor"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

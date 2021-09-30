@@ -1,0 +1,59 @@
+﻿<div class="flex-shrink-0 p-3 bg-white col-md-2">
+    <a href="/Admin/Home" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+        <span class="fs-5 fw-semibold">JustBlog Manager</span>
+    </a>
+    <ul class="list-unstyled ps-0">
+        <li class="mb-1">
+            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">
+                Category Manager
+            </button>
+            <div class="collapse" id="home-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="/admin/category/Index" class="link-dark rounded">List</a></li>
+                    <li><a href="/admin/category/create" class="link-dark rounded">Create</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+                Post Manager
+            </button>
+            <div class="collapse" id="dashboard-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="/admin/post/index" class="link-dark rounded">List</a></li>
+                    <li><a href="/admin/post/create" class="link-dark rounded">Create</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+                Tag Manager
+            </button>
+            <div class="collapse" id="orders-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="/admin/tag/index" class="link-dark rounded">List</a></li>
+                    <li><a href="/admin/tag/create" class="link-dark rounded">Create</a></li>
+                </ul>
+            </div>
+        </li>
+        @if (User.IsInRole("BlogOwner"))
+        {
+            <li class="mb-1">
+                <a class="btn align-items-center rounded" href="/Admin/UserRoles">
+                    Role Manager
+                </a>
+            </li>
+        }
+        <li class="border-top my-3"></li>
+        <li class="mb-1">
+            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+                Account
+            </button>
+            <div class="collapse" id="account-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="/Home" class="link-dark rounded">Sign out</a></li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>

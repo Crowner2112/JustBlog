@@ -1,0 +1,123 @@
+﻿@using JustBlog.ViewModels.Posts
+@model IEnumerable<CreatePostVm>
+
+@{ string keyword = "";
+    if (ViewBag.Keyword != null) keyword = ViewBag.Keyword as string; }
+
+<h3>Danh sách danh mục bài viết</h3>
+<hr />
+<div class="card">
+    <div class="card-header">
+        <form asp-area="Admin" asp-controller="Post" asp-action="Index" method="get">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" value="@keyword" name="keyword" placeholder="Search string" aria-label="Search string" aria-describedby="basic-addon2">
+                <select>
+                    <option value="value"> Find By Title</option>
+                    <option value="value"> Find By Content</option>
+                </select>
+                <button type="submit" class="btn btn-success">Search</button>
+            </div>
+        </form>
+    </div>
+    <div class="card-body">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success"> @TempData["Success"]</div>}
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Created On</th>
+                    <th>Update On</th>
+                    <th>Status</th>
+                    <th>Publish</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var post in Model)
+                {
+                    <tr>
+                        <td>@post.Id</td>
+                        <td>@post.Title</td>
+                        <td>@post.CreatedOn.ToString("dd/MM/yyyy")</td>
+                        <td>@post.UpdatedOn.ToString("dd/MM/yyyy")</td>
+                        @if (post.IsDeleted)
+                        {
+                            <td id="status">Deleted</td>
+                        }
+                        else
+                        {
+                            <td id="status"></td>
+                        }
+                        <td id="publish">@post.Publish</td>
+                        <td class="d-flex">
+                            @if (User.IsInRole("BlogOwner"))
+                            {
+                                if (post.IsDeleted)
+                                {
+                                    <button type="button" class="btn btn-sm btn-danger d-none d-md-inline-block mr-1" disabled>Delete</button> }
+                                else
+                                {
+                                    <form asp-action="Delete" asp-route-id="@post.Id" data-ajax="true" data-ajax-success="deleteItem(this)">
+                                        <button id="btnSubmit" type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block mr-1" onclick="return functionConfirm(this)">
+                                            Delete
+                                        </button>
+                                    </form>
+                                }
+                            }
+                            <a asp-action="Update" asp-route-id="@post.Id" class="btn btn-sm btn-secondary mr-1">Edit</a>
+                            <form asp-action="UpdatePublish" asp-route-id="@post.Id" data-ajax="true" data-ajax-success="changePublish(this)">
+                                @if (post.Publish)
+                                {
+                                    <button id="btnSubmitUpdate" type="submit" class="btn btn-sm btn-warning d-none d-md-inline-block mr-1">
+                                        Un-publish
+                                    </button> }
+                                else
+                                {
+                                    <button id="btnSubmitUpdate" type="submit" class="btn btn-sm btn-success d-none d-md-inline-block mr-1">
+                                        Publish
+                                    </button>}
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+        <partial name="_PagingSection" />
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        function functionConfirm(event) {
+            if (confirm("Are you want to delete this post?")) {
+                $('#deleteform').submit();
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function changePublish(form) {
+            if ($(form).children("#btnSubmitUpdate").hasClass("btn-warning")) {
+                $(form).children("#btnSubmitUpdate").removeClass("btn-warning").addClass("btn-success");
+                $(form).children("#btnSubmitUpdate").html('Publish');
+                $(form).parents('tr').children('#publish').text("False");
+            }
+            else if ($(form).children("#btnSubmitUpdate").hasClass("btn-success")) {
+                $(form).children("#btnSubmitUpdate").removeClass("btn-success").addClass("btn-warning");
+                $(form).children("#btnSubmitUpdate").html('Un-publish');
+                $(form).parents('tr').children('#publish').text("True");
+            }
+        }
+
+        function deleteItem(form) {
+            $(form).parents('tr').children('#status').text("Deleted");
+            $(form).children("#btnSubmit").attr('disabled', true);
+        }
+    </script>
+}

@@ -1,0 +1,67 @@
+﻿@model JustBlog.ViewModels.Accounts.RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = "";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Register</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.markuptag.com/bootstrap/5/css/bootstrap.min.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 offset-md-4">
+                <div class="login-form bg-light mt-4 p-4">
+                    <form asp-controller="Home" asp-action="Register" method="post" class="row g-3">
+                        <h4>Register</h4>
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="col-12">
+                            <label asp-for="FirstName"></label>
+                            <input asp-for="FirstName" class="form-control" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="LastName"></label>
+                            <input asp-for="LastName" class="form-control" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Email"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Dob"></label>
+                            <input asp-for="Dob" class="form-control" />
+                            <span asp-validation-for="Dob" class="text-danger"></span>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Password"></label>
+                            <input asp-for="Password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="ConfirmPassword"></label>
+                            <input asp-for="ConfirmPassword" class="form-control" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn-primary rounded-1">Register</button>
+                    </form>
+                    <hr class="mt-4">
+                    <div class="col-12">
+                        <p class="text-center mb-0">Already have a account? <a href="/Home/Login">Login</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://www.markuptag.com/bootstrap/5/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

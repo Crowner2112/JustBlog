@@ -1,0 +1,119 @@
+﻿@using JustBlog.ViewModels.Posts
+@using JustBlog.Data.IRepositories
+@using Microsoft.AspNetCore.Identity
+@using JustBlog.Models.Entities
+@inject ICategoryRepository categoryRepository
+@inject IPostTagMapRepository postTagMapRepository
+@inject ICommentRepository commentRepository
+@inject IPostUserRateMapRepository postUserRateMapRepository
+@inject UserManager<AppUser> userManager
+
+@model PostVm
+@{
+    ViewData["Title"] = "Index";
+    var categoryName = categoryRepository.GetById(Model.CategoryId).Name;
+    var listTags = postTagMapRepository.GetTagsByPostId(Model.Id);
+    var comments = commentRepository.GetAllCommentByPostId(Model.Id);
+    var user = await userManager.GetUserAsync(User);
+    var userName = user.FirstName + " " + user.LastName;
+    var userEmail = user.Email;
+    var isVoted = postUserRateMapRepository.IsVotedByUserIdAndPostId(user.Id, Model.Id);
+}
+
+<div class="card mb-3">
+    <div class="card-header">
+        <div class="d-flex justify-content-between">
+            <div>
+                <h2 class="card-title">@Model.Title</h2>
+                <h5 class="card-subtitle mb-2 text-muted">@Model.ShortDescription</h5>
+            </div>
+            <div>
+                <form asp-controller="Post" asp-action="ChangeVote" method="post" data-ajax="true" data-ajax-success="changeVote(this)">
+                    @if (isVoted)
+                    {
+                        <button type="submit" class="btn btn-outline-primary active" id="btnChange"><i class="fas fa-thumbs-up"></i></button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-outline-primary" id="btnChange"><i class="fas fa-thumbs-up"></i></button>
+                    }
+                </form>
+            </div>
+        </div>
+        <p class="post-meta">
+            <em>
+                Posted @Model.CreatedOn.ToString("MMM dd") Viewed @Model.ViewCount time(s) with Rate @Math.Round(Model.Rate, 2)
+            </em>
+        </p>
+        <p>Category: <u>@categoryName</u></p>
+        <p>
+            Tag:
+            @foreach (var tag in listTags)
+            {
+                <span class="border border-dark bg-black text-white p-2"><em><u>@tag.Name</u></em></span>
+            }
+        </p>
+    </div>
+    <div class="card-body">
+        <div>
+            @Html.Raw(Model.PostContent)
+        </div>
+        <hr />
+        <div id="commentSection">
+            <p class="m-0"><em>Comments</em></p>
+            @foreach (var comment in comments)
+            {
+                <div class="card mb-2">
+                    <div class="card-header">
+                        <b>@comment.Name</b> - @comment.Email - @comment.CommentTime.ToString("dd/MM/yyyy")
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text m-0">@comment.CommentText</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="card-footer">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <form asp-controller="Post" asp-action="AddComment" method="post" data-ajax="true" data-ajax-success="addComment(this)">
+                <div class="input-group mb-3">
+                    <input type="text" id="commentText" name="commentText" placeholder="Add a comment" class="w-75 form-control" />
+                    <button class="btn btn-outline-primary w-25" style="width: 20%" type="submit">Send</button>
+                </div>
+            </form>
+        }
+        else
+        {
+            <p>Please <a href="/Home/Login">login</a> to comment this post</p>
+        }
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+            function addComment(form) {
+                var commentText = $('#commentText').val();
+                var html = [
+                    '<div class="card mb-2">',
+                    '<div class="card-header">',
+                    '<b>@userName</b> - @userEmail - @DateTime.UtcNow.ToString("dd/MM/yyyy")',
+                    '</div>',
+                    '<div class="card-body">',
+                    '<p class="card-text m-0">',commentText,'</p>',
+                    '</div>'
+                ];
+                $('#commentSection').append(html.join(''));
+                $('#commentText').val('');
+        }
+        function changeVote(form) {
+            if ($(form).children("#btnChange").hasClass("active")) {
+                $(form).children("#btnChange").removeClass("active");
+            }
+            else{
+                $(form).children("#btnChange").addClass("active");
+            }
+        }
+    </script>
+}

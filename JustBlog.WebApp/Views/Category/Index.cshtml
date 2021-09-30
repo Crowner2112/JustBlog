@@ -1,0 +1,25 @@
+﻿@using JustBlog.Models.Entities
+@model IEnumerable<Post>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h2 class="post-title">All Posts of @ViewBag.CategoryName!</h2>
+<hr />
+@foreach (var post in Model)
+{
+    var year = post.CreatedOn.ToString("yyyy");
+    var month = post.CreatedOn.ToString("MM");
+    var url = post.UrlSlug;
+    <div class="post-preview">
+        <a href="/Post/@year/@month/@url">
+            <h2 class="post-title">@post.Title</h2>
+            <h3 class="post-subtitle">@post.ShortDescription</h3>
+        </a>
+        <p class="post-meta">
+            Posted @post.CreatedOn.ToString("dd/MM/yyyy") with rate @Math.Round(post.Rate, 2) by @post.ViewCount view(s)
+        </p>
+    </div>
+    <hr class="my-4" />
+}
+<partial name="_PagingHome" />

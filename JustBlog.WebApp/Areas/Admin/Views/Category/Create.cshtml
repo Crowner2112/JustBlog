@@ -1,0 +1,37 @@
+﻿@using JustBlog.ViewModels.Categories
+@model CategoryVm
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h3>Thêm mới danh mục bài viết</h3>
+<hr />
+<div class="row d-flex justify-content-center">
+    <div class="col-5">
+        <form asp-area="Admin" asp-controller="Category" asp-action="Create">
+            @if (TempData["PreResult"] != null)
+            {
+                <div class="alert alert-danger">@TempData["PreResult"]</div>
+            }
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="form-label"></label>
+                <input type="text" class="form-control" asp-for="Name" onchange="ChangeUrl('Name','UrlSlug')">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UrlSlug" class="form-label"></label>
+                <input type="text" class="form-control" asp-for="UrlSlug" readonly />
+                <span asp-validation-for="UrlSlug" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" id="editor"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
