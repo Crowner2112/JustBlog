@@ -1,12 +1,14 @@
 ﻿using JustBlog.Application.Comments;
 using JustBlog.Application.Posts;
 using JustBlog.Application.Rates;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace JustBlog.WebApp.Controllers
 {
+    [Authorize(Roles = "BlogOwner, Contributor, User")]
     public class PostController : Controller
     {
         private readonly IPostService postService;

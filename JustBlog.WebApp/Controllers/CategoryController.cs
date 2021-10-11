@@ -19,7 +19,7 @@ namespace JustBlog.WebApp.Controllers
             ViewBag.CategoryName = categoryService.GetCategoryNameByUrlSlug(url);
             ViewBag.limitContent = limit;
             ViewBag.pageCurrent = page;
-            int countPost = this.categoryService.Count();
+            int countPost = this.categoryService.CountPostByUrl(url);
             ViewBag.countPost = countPost;
             ViewBag.numberPage = this.categoryService.NumberPage(countPost, limit);
             var model = this.categoryService.GetAllPagingViewByUrl(url, start, limit);

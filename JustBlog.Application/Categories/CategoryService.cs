@@ -22,6 +22,13 @@ namespace JustBlog.Application.Categories
             return categories.Count();
         }
 
+        public int CountPostByUrl(string url)
+        {
+            var currentCategory = unitOfWork.CategoryRepository.GetByUrlSlug(url);
+            var posts = unitOfWork.PostRepository.GetPostByCategoryId(currentCategory.Id);
+            return posts.Count();
+        }
+
         public bool Create(CategoryVm categoryVm)
         {
             try

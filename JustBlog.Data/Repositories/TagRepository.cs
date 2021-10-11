@@ -13,6 +13,11 @@ namespace JustBlog.Data.Repositories
         {
         }
 
+        public Tag GetByUrlSlug(string url)
+        {
+            return this.DbSet.FirstOrDefault(x => x.UrlSlug == url);
+        }
+
         public List<int> AddTagByString(string tagNames)
         {
             var tags = tagNames.Split(';');

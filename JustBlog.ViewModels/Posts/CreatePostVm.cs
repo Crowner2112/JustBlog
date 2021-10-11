@@ -27,6 +27,8 @@ namespace JustBlog.ViewModels.Posts
 
         public bool Publish { get; set; }
 
+        public int? UserId { get; set; }
+
         [DisplayName("Danh mục")]
         [Required(ErrorMessage = "Danh mục không được trống")]
         public int CategoryId { get; set; }

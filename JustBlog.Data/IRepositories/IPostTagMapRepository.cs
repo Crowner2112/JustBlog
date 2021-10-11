@@ -7,6 +7,8 @@ namespace JustBlog.Data.IRepositories
     {
         IEnumerable<Tag> GetTagsByPostId(int id);
 
+        IEnumerable<Post> GetPostsByTagId(int id);
+
         IEnumerable<PostTagMap> GetByPostId(int id);
     }
 }

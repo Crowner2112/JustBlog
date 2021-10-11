@@ -2,32 +2,61 @@
 using JustBlog.Models.Entities;
 using JustBlog.ViewModels.Posts;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace JustBlog.WebApp.Areas.Admin.Controllers
 {
     public class PostController : BaseController
     {
         private readonly IPostService postService;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IHttpContextAccessor httpContextAccessor;
+        private static int CurrentUserId { get; set; }
+        private static IList<string> CurrentRoles { get; set; } 
 
-        public PostController(IPostService postService)
+        public PostController(IPostService postService, UserManager<AppUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
             this.postService = postService;
+            _userManager = userManager;
+            this.httpContextAccessor = httpContextAccessor;
+            var user = httpContextAccessor.HttpContext.User;
+            CurrentUserId = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
         }
 
-        public IActionResult Index(string keyword = null, int page = 1)
+        public async Task<IActionResult> Index(string keyword = null, int page = 1)
         {
+
             if (TempData["PreResult"] != null)
             {
                 TempData["Success"] = TempData["PreResult"];
             }
+            var user = await _userManager.FindByIdAsync(CurrentUserId.ToString());
+            CurrentRoles = await _userManager.GetRolesAsync(user);
             Func<Post, bool> filter = null;
-            if (!string.IsNullOrEmpty(keyword))
+            if(CurrentRoles.Contains("BlogOwner"))
             {
-                ViewBag.Keyword = keyword;
-                keyword = keyword.ToLower();
-                filter = x => x.Title.ToLower().Contains(keyword);
+                if (!string.IsNullOrEmpty(keyword))
+                {
+                    ViewBag.Keyword = keyword;
+                    keyword = keyword.ToLower();
+                    filter = x => x.Title.ToLower().Contains(keyword);
+                }
+            }
+            else if (CurrentRoles.Contains("Contributor"))
+            {
+                filter = x => x.UserId == CurrentUserId;
+                if (!string.IsNullOrEmpty(keyword))
+                {
+                    ViewBag.Keyword = keyword;
+                    keyword = keyword.ToLower();
+                    filter = x => x.Title.ToLower().Contains(keyword) && x.UserId == CurrentUserId;
+                }
             }
             ViewData["ControllerName"] = "Post";
             int limit = 10;
@@ -56,6 +85,7 @@ namespace JustBlog.WebApp.Areas.Admin.Controllers
             bool isSuccess;
             try
             {
+                createPostVm.UserId = CurrentUserId;
                 isSuccess = this.postService.Create(createPostVm);
             }
             catch (Exception e)

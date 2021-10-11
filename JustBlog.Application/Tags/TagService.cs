@@ -1,5 +1,6 @@
 ﻿using JustBlog.Data.Infrastructures;
 using JustBlog.Models.Entities;
+using JustBlog.ViewModels.Posts;
 using JustBlog.ViewModels.Tags;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,22 @@ namespace JustBlog.Application.Tags
             this.unitOfWork = unitOfWork;
         }
 
+        public Tag GetByUrlSlug(string url)
+        {
+            return unitOfWork.TagRepository.Find(x=>x.UrlSlug == url).FirstOrDefault();
+        }
+
         public int Count()
         {
             var tags = this.unitOfWork.TagRepository.GetAll(isDeleted: true);
             return tags.Count();
+        }
+
+        public int CountPostsByTagUrlSlug(string url)
+        {
+            var tag = this.unitOfWork.TagRepository.GetByUrlSlug(url);
+            var posts = this.unitOfWork.PostTagMapRepository.GetPostsByTagId(tag.Id);
+            return posts.Count();
         }
 
         public bool Create(TagVm tagVm)
@@ -102,6 +115,14 @@ namespace JustBlog.Application.Tags
                 tagVms.Add(tagVm);
             }
             var result = tagVms.OrderBy(x => x.Id).Skip(start).Take(limit);
+            return result;
+        }
+
+        public IEnumerable<Post> GetAllPostsByTagUrlPaging(int start, int limit, string url)
+        {
+            var tag = this.unitOfWork.TagRepository.GetByUrlSlug(url);
+            var posts = this.unitOfWork.PostTagMapRepository.GetPostsByTagId(tag.Id);
+            var result = posts.OrderBy(x => x.Id).Skip(start).Take(limit);
             return result;
         }
 

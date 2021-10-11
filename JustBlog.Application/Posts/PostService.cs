@@ -53,7 +53,8 @@ namespace JustBlog.Application.Posts
                     ShortDescription = createPostVm.ShortDescription,
                     PostContent = createPostVm.PostContent,
                     UrlSlug = createPostVm.UrlSlug,
-                    PostTagMaps = postTagMaps
+                    PostTagMaps = postTagMaps,
+                    UserId = createPostVm.UserId
                 };
 
                 this.unitOfWork.PostRepository.Add(post);
@@ -95,7 +96,8 @@ namespace JustBlog.Application.Posts
                     Publish = post.Publish,
                     ShortDescription = post.ShortDescription,
                     CreatedOn = post.CreatedOn,
-                    UpdatedOn = post.UpdatedOn
+                    UpdatedOn = post.UpdatedOn,
+                    UserId = post.UserId
                 };
                 postVms.Add(postVm);
             }

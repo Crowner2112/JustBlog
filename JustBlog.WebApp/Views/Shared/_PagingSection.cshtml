@@ -3,7 +3,7 @@
     int pageCurrent = ViewBag.pageCurrent;
     int limit = ViewBag.limitContent;
     int countPost = ViewBag.countPost;
-    if (limit <= countPost)
+    if (limit < countPost)
     {
         if (pageCurrent == 1)
         {

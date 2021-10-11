@@ -42,10 +42,11 @@ namespace JustBlog.Data.Repositories
 
         public IEnumerable<Post> GetPostByCategoryId(int id)
         {
-            var posts = this.DbSet.Where(x => x.CategoryId == id);
+            var posts = this.DbSet.Where(x => x.CategoryId == id && !x.IsDeleted);
             foreach (var post in posts)
             {
-                post.Rate = (decimal)post.RateCount / post.ViewCount;
+                if (post.RateCount > 0 && post.ViewCount > 0)
+                    post.Rate = (decimal)post.RateCount / post.ViewCount;
             }
             return posts;
         }

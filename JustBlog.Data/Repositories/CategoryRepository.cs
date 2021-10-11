@@ -11,6 +11,11 @@ namespace JustBlog.Data.Repositories
         {
         }
 
+        public Category GetByUrlSlug(string url)
+        {
+            return this.DbSet.Where(x => x.UrlSlug == url).FirstOrDefault();
+        }
+
         public string GetNameByUrlSlug(string url)
         {
             var category = this.DbSet.Where(x => x.UrlSlug == url).FirstOrDefault();

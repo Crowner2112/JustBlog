@@ -6,5 +6,7 @@ namespace JustBlog.Data.IRepositories
     public interface ICategoryRepository : IGenericRepository<Category, int>
     {
         string GetNameByUrlSlug(string url);
+
+        Category GetByUrlSlug(string url);
     }
 }

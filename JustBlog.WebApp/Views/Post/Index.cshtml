@@ -11,7 +11,7 @@
 @model PostVm
 @{
     ViewData["Title"] = "Index";
-    var categoryName = categoryRepository.GetById(Model.CategoryId).Name;
+    var category = categoryRepository.GetById(Model.CategoryId);
     var listTags = postTagMapRepository.GetTagsByPostId(Model.Id);
     var comments = commentRepository.GetAllCommentByPostId(Model.Id);
     var user = await userManager.GetUserAsync(User);
@@ -45,14 +45,17 @@
                 Posted @Model.CreatedOn.ToString("MMM dd") Viewed @Model.ViewCount time(s) with Rate @Math.Round(Model.Rate, 2)
             </em>
         </p>
-        <p>Category: <u>@categoryName</u></p>
-        <p>
+        <p>Category: <a href="/Category/@category.UrlSlug">@category.Name</a></p>
+        <div class="d-flex">
             Tag:
             @foreach (var tag in listTags)
             {
-                <span class="border border-dark bg-black text-white p-2"><em><u>@tag.Name</u></em></span>
+                <form asp-controller="Tag" asp-action="Index" method="post">
+                    <input type="hidden" name="url" id="url" value="@tag.UrlSlug" />
+                    <button type="submit" class="btn btn-dark bg-black m-1 font-italic">@tag.Name</button>
+                </form>
             }
-        </p>
+        </div>
     </div>
     <div class="card-body">
         <div>
@@ -85,7 +88,7 @@
                             <div class="input-group mb-3">
                                 <input type="hidden" name="commentId" value="@comment.Id" />
                                 <input type="text" id="commentTextUpdate" name="commentText" placeholder="Add a comment" class="w-75 form-control" />
-                                <button class="btn btn-outline-primary" type="submit">Send</button>
+                                <button class="btn btn-outline-primary" type="submit"><i class="fas fa-paper-plane"></i></button>
                             </div>
                         </form>
                     </div>
@@ -99,7 +102,7 @@
             <form asp-controller="Post" asp-action="AddComment" method="post" data-ajax="true" data-ajax-success="addComment(this)">
                 <div class="input-group mb-3">
                     <input type="text" id="commentText" name="commentText" placeholder="Add a comment" class="w-75 form-control" />
-                    <button class="btn btn-outline-primary w-25" style="width: 20%" type="submit">Send</button>
+                    <button class="btn btn-outline-primary" type="submit"><i class="fas fa-paper-plane"></i></button>
                     <span id="dangerText" class="text-danger"></span>
                 </div>
             </form>

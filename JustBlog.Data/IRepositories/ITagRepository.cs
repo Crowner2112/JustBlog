@@ -7,5 +7,7 @@ namespace JustBlog.Data.IRepositories
     public interface ITagRepository : IGenericRepository<Tag, int>
     {
         List<int> AddTagByString(string tagNames);
+
+        Tag GetByUrlSlug(string url);
     }
 }

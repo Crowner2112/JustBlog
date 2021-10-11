@@ -26,5 +26,7 @@ namespace JustBlog.Application.Categories
         IEnumerable<Post> GetAllPagingViewByUrl(string url, int start, int limit);
 
         string GetCategoryNameByUrlSlug(string url);
+
+        int CountPostByUrl(string url);
     }
 }

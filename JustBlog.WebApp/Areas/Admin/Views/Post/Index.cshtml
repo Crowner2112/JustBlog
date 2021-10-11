@@ -32,6 +32,7 @@
                     <th>Update On</th>
                     <th>Status</th>
                     <th>Publish</th>
+                    <th>User ID</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -52,7 +53,8 @@
                             <td id="status"></td>
                         }
                         <td id="publish">@post.Publish</td>
-                        <td class="d-flex">
+                        <td>@post.UserId</td>
+                        <td class="d-flex" id="actionSection">
                             @if (User.IsInRole("BlogOwner"))
                             {
                                 if (post.IsDeleted)
@@ -67,18 +69,45 @@
                                     </form>
                                 }
                             }
-                            <a asp-action="Update" asp-route-id="@post.Id" class="btn btn-sm btn-secondary mr-1">Edit</a>
+                            @if (post.IsDeleted)
+                            {
+                                <a asp-action="Update" asp-route-id="@post.Id" id="btnEdit" class="btn disabled btn-sm btn-secondary mr-1">Edit</a>
+                            }
+                            else
+                            {
+                                <a asp-action="Update" asp-route-id="@post.Id" id="btnEdit" class="btn btn-sm btn-secondary mr-1">Edit</a>
+                            }
                             <form asp-action="UpdatePublish" asp-route-id="@post.Id" data-ajax="true" data-ajax-success="changePublish(this)">
                                 @if (post.Publish)
                                 {
-                                    <button id="btnSubmitUpdate" type="submit" class="btn btn-sm btn-warning d-none d-md-inline-block mr-1">
-                                        Un-publish
-                                    </button> }
+                                    if (post.IsDeleted)
+                                    {
+                                        <button id="btnSubmitUpdate" type="submit" class="btn btn-sm btn-warning d-none d-md-inline-block mr-1" disabled>
+                                            Un-publish
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button id="btnSubmitUpdate" type="submit" class="btn btn-sm btn-warning d-none d-md-inline-block mr-1">
+                                            Un-publish
+                                        </button>
+                                    }
+                                }
                                 else
                                 {
-                                    <button id="btnSubmitUpdate" type="submit" class="btn btn-sm btn-success d-none d-md-inline-block mr-1">
-                                        Publish
-                                    </button>}
+                                    if (post.IsDeleted)
+                                    {
+                                        <button id="btnSubmitUpdate" type="submit" class="btn btn-sm btn-success d-none d-md-inline-block mr-1" disabled>
+                                            Publish
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button id="btnSubmitUpdate" type="submit" class="btn btn-sm btn-success d-none d-md-inline-block mr-1">
+                                            Publish
+                                        </button>
+                                    }
+                                }
                             </form>
                         </td>
                     </tr>
@@ -118,6 +147,8 @@
         function deleteItem(form) {
             $(form).parents('tr').children('#status').text("Deleted");
             $(form).children("#btnSubmit").attr('disabled', true);
+            $(form).closest('#actionSection').find('#btnSubmitUpdate').attr('disabled', true);
+            $(form).closest('#actionSection').find('#btnEdit').addClass("disabled");
         }
     </script>
 }

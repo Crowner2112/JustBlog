@@ -96,6 +96,12 @@ namespace JustBlog.WebApp
                     );
 
                 endpoints.MapControllerRoute(
+                    name: "tag",
+                    pattern: "Tag/{urlSlug}",
+                    new { controller = "Tag", action = "Index" }
+                    );
+
+                endpoints.MapControllerRoute(
                     name: "post",
                     pattern: "Post/{year}/{month}/{urlSlug}",
                     new { controller = "Post", action = "Index" },

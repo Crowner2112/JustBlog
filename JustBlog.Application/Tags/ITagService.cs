@@ -22,5 +22,11 @@ namespace JustBlog.Application.Tags
         bool Update(TagVm tagVm);
 
         bool Delete(int id, bool isDeleted = false);
+
+        IEnumerable<Post> GetAllPostsByTagUrlPaging(int start, int limit, string url);
+
+        int CountPostsByTagUrlSlug(string url);
+
+        Tag GetByUrlSlug(string url);
     }
 }

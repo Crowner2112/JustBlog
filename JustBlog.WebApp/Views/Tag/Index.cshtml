@@ -1,0 +1,11 @@
+﻿@using JustBlog.Models.Entities
+@model IEnumerable<Post>
+@{
+    ViewData["Title"] = "Tag Page";
+    var tagName = ViewBag.tagName;
+}
+
+<h2 class="post-title">All Posts of #@tagName!</h2>
+<hr />
+@await Html.PartialAsync("_ShowPosts", Model)
+<partial name="_PagingSection" />

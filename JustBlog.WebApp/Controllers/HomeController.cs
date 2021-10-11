@@ -11,7 +11,6 @@ namespace JustBlog.WebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly ICategoryService categoryService;
         private readonly IPostService postService;
         private readonly IUserService userService;

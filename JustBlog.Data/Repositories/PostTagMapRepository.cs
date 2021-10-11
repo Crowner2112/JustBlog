@@ -19,6 +19,19 @@ namespace JustBlog.Data.Repositories
             return Context.PostTagMaps.Where(x => x.PostId == id);
         }
 
+        public IEnumerable<Post> GetPostsByTagId(int id)
+        {
+            var postTags = Context.PostTagMaps.Where(x => x.TagId == id);
+            var listPosts = new List<Post>();
+            foreach (var item in postTags)
+            {
+                var post = Context.Posts.Find(item.PostId);
+                if (!post.IsDeleted)
+                    listPosts.Add(post);
+            }
+            return listPosts;
+        }
+
         public IEnumerable<Tag> GetTagsByPostId(int id)
         {
             var postTags = Context.PostTagMaps.Where(x => x.PostId == id);

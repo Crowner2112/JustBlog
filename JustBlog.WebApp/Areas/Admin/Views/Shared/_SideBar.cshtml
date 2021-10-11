@@ -1,4 +1,16 @@
-﻿<div class="flex-shrink-0 p-3 bg-white col-md-2">
+﻿@using Microsoft.AspNetCore.Identity
+@using JustBlog.Models.Entities
+@inject UserManager<AppUser> UserManager
+
+@{ 
+    var role = "";
+    if (User.IsInRole("BlogOwner"))
+        role = "BlogOwner";
+    else
+        role = "Contributor";
+}
+
+<div class="flex-shrink-0 p-3 bg-white col-md-2">
     <a href="/Admin/Home" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
         <span class="fs-5 fw-semibold">JustBlog Manager</span>
     </a>
@@ -47,11 +59,12 @@
         <li class="border-top my-3"></li>
         <li class="mb-1">
             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
-                Account
+                @UserManager.GetUserName(User) (@role)
             </button>
             <div class="collapse" id="account-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="/Home" class="link-dark rounded">Sign out</a></li>
+                    <li><a href="/Home" class="link-dark rounded">Get back to Home page</a></li>
+                    <li><a href="/Home/Logout" class="link-dark rounded">Logout</a></li>
                 </ul>
             </div>
         </li>

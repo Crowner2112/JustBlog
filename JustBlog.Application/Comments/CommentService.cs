@@ -1,6 +1,7 @@
 ﻿using JustBlog.Data.Infrastructures;
 using JustBlog.Models.Entities;
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace JustBlog.Application.Comments
@@ -43,6 +44,11 @@ namespace JustBlog.Application.Comments
             unitOfWork.CommentRepository.UpdateCommentText(id, commentText);
             unitOfWork.SaveChanges();
             return true;
+        }
+
+        public IEnumerable<Comment> GetCommentsByPostId(int postId)
+        {
+            return unitOfWork.CommentRepository.GetAllCommentByPostId(postId);
         }
     }
 }
